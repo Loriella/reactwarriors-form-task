@@ -3,7 +3,7 @@ import React from 'react';
 const Stepper = () => {
   return (
     <div className="steps-container mt-4">
-      <div className="step-item step-item-active">
+      <div className="step-item">
         <div className="step-number">1</div>
         <div className="step-item-title">Basic</div>
       </div>
