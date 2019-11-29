@@ -1,4 +1,6 @@
 import React from 'react';
+import countries from '../data/countries';
+import cities from '../data/cities';
 
 const FormPage4 = props => {
   const { stateApp } = props;
@@ -26,7 +28,9 @@ const FormPage4 = props => {
           </p>
           <p>
             <strong>Location: </strong>
-            {`${stateApp.country}, ${stateApp.city}`}
+            {`${countries[stateApp.country - 1].name}, ${
+              cities[stateApp.city].name
+            }`}
           </p>
         </div>
       </div>
