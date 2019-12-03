@@ -2,7 +2,7 @@ import React from 'react';
 import countries from '../data/countries';
 import cities from '../data/cities';
 
-const FormPage4 = props => {
+const Finish = props => {
   const { stateApp } = props;
   return (
     <div className="form-group px-2">
@@ -38,4 +38,4 @@ const FormPage4 = props => {
   );
 };
 
-export default FormPage4;
+export default Finish;

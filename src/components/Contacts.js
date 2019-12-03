@@ -3,7 +3,7 @@ import Field from './Field';
 import countries from '../data/countries';
 import cities from '../data/cities';
 
-const FormPage2 = props => {
+const Contacts = props => {
   const { stateApp, onChange, getOptionsItems, getOptionsCities } = props;
   return (
     <div className="form-group">
@@ -55,4 +55,4 @@ const FormPage2 = props => {
   );
 };
 
-export default FormPage2;
+export default Contacts;

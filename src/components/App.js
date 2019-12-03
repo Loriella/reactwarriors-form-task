@@ -1,9 +1,9 @@
 import React from 'react';
 import Stepper from './Stepper';
-import FormPage1 from './FormPage1';
-import FormPage2 from './FormPage2';
-import FormPage3 from './FormPage3';
-import FormPage4 from './FormPage4';
+import Basic from './Basic';
+import Contacts from './Contacts';
+import Avatar from './Avatar';
+import Finish from './Finish';
 import classNames from 'classnames';
 
 export default class App extends React.Component {
@@ -178,10 +178,10 @@ export default class App extends React.Component {
         <Stepper currentPage={this.state.currentpage} />
         <form className="form card-body">
           {this.state.currentpage === 1 && (
-            <FormPage1 onChange={this.onChange} stateApp={this.state} />
+            <Basic onChange={this.onChange} stateApp={this.state} />
           )}
           {this.state.currentpage === 2 && (
-            <FormPage2
+            <Contacts
               onChange={this.onChange}
               stateApp={this.state}
               getOptionsItems={this.getOptionsItems}
@@ -189,12 +189,12 @@ export default class App extends React.Component {
             />
           )}
           {this.state.currentpage === 3 && (
-            <FormPage3
+            <Avatar
               onChangeAvatar={this.onChangeAvatar}
               stateApp={this.state}
             />
           )}
-          {this.state.currentpage === 4 && <FormPage4 stateApp={this.state} />}
+          {this.state.currentpage === 4 && <Finish stateApp={this.state} />}
           <div className="d-flex justify-content-center">
             {this.state.currentpage !== 4 ? (
               <div>

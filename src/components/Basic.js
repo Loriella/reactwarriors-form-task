@@ -1,7 +1,7 @@
 import React from 'react';
 import Field from './Field';
 
-const FormPage1 = props => {
+const Basic = props => {
   const { stateApp, onChange } = props;
   return (
     <div className="form-group">
@@ -80,4 +80,4 @@ const FormPage1 = props => {
   );
 };
 
-export default FormPage1;
+export default Basic;

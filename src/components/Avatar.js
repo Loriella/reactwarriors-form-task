@@ -1,7 +1,7 @@
 import React from 'react';
 import defaultAvatar from '../img/default-avatar.png';
 
-const FormPage3 = props => {
+const Avatar = props => {
   const { onChangeAvatar, stateApp } = props;
 
   return (
@@ -28,4 +28,4 @@ const FormPage3 = props => {
   );
 };
 
-export default FormPage3;
+export default Avatar;
