@@ -4,230 +4,164 @@ import Basic from './Basic';
 import Contacts from './Contacts';
 import Avatar from './Avatar';
 import Finish from './Finish';
-import classNames from 'classnames';
+import BottomNavigation from './BottomNavigation';
+
+const initialState = {
+  values: {
+    firstName: '',
+    lastName: '',
+    password: '',
+    repeatPassword: '',
+    gender: 'male',
+    email: '',
+    mobile: '',
+    country: '',
+    city: '',
+    avatar: '',
+  },
+  currentPage: 1,
+  errors: {
+    firstName: false,
+    lastName: false,
+    password: false,
+    repeatPassword: false,
+    email: false,
+    mobile: false,
+    country: false,
+    city: false,
+    avatar: false,
+  },
+};
 
 export default class App extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
-    this.state = {
-      firstname: '',
-      lastname: '',
-      password: '',
-      repeatPassword: '',
-      gender: 'male',
-      email: '',
-      mobile: '',
-      country: '1',
-      city: '',
-      avatar: '',
-      currentpage: 1,
-      errors: {
-        firstname: false,
-        lastname: false,
-        password: false,
-        repeatPassword: false,
-        email: false,
-        mobile: false,
-        country: false,
-        city: false,
-        avatar: false,
-      },
-    };
+    this.state = { ...initialState };
   }
 
   onChange = event => {
     const { name, value } = event.target;
-    const { [name]: _, ...errors } = this.state.errors;
+    let cityState = this.state.values.city;
 
+    if (name === 'country' && value !== this.state.values.country) {
+      cityState = '';
+    }
+
+    this.setState(state => ({
+      values: {
+        ...this.state.values,
+        city: cityState,
+        [name]: value,
+      },
+    }));
+  };
+
+  onReset = () => {
     this.setState({
-      [name]: value,
-      errors,
+      ...initialState,
     });
   };
 
-  pagesValidation = errors => {
-    if (this.state.currentpage === 1) {
-      if (this.state.firstname.length < 5) {
-        errors.firstname = 'Must be 5 characters or more';
-      }
-      if (this.state.lastname.length < 5) {
-        errors.lastname = 'Must be 5 characters or more';
-      }
-      if (this.state.password.length < 6) {
-        errors.password = 'Must be 6 characters or more';
-      }
-      if (this.state.password !== this.state.repeatPassword) {
-        errors.repeatPassword = 'Must be equal password';
-      }
-    }
-
-    if (this.state.currentpage === 2) {
-      if (!/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i.test(this.state.email)) {
-        errors.email = 'Invalid email address';
-      }
-      if (!/^\d[\d()-]{4,14}\d$/.test(this.state.mobile)) {
-        errors.mobile = 'Invalid mobile';
-      }
-      if (this.state.city === '') {
-        errors.city = 'Required';
-      }
-    }
-
-    if (this.state.currentpage === 3) {
-      if (this.state.avatar === '') {
-        errors.avatar = 'Required';
-      }
-    }
-  };
-
-  getOptionsItems = items => {
-    return items.map(item => (
-      <option key={item.id} value={item.id}>
-        {item.name}
-      </option>
-    ));
-  };
-
-  getOptionsCities = cities => {
-    const citiesArr = Object.values(cities);
-    const optionsCities = [{ id: 0, name: 'Select city' }];
-    const { country } = this.state;
-
-    citiesArr.forEach((item, index) => {
-      if (+item.country === +country) {
-        const cityItem = {
-          id: index + 1,
-          name: item.name,
-        };
-        optionsCities.push(cityItem);
-      }
-    });
-    return optionsCities;
-  };
-
-  onChangeAvatar = event => {
-    const reader = new FileReader();
-
-    reader.onload = event => {
-      this.setState({
-        avatar: event.target.result,
-      });
-    };
-    reader.readAsDataURL(event.target.files[0]);
-  };
-
-  previousFormPage = event => {
-    event.preventDefault();
-
-    if (this.state.currentpage > 1) {
-      this.setState({
-        currentpage: this.state.currentpage - 1,
-      });
-    }
-  };
-
-  nextFormPage = event => {
-    event.preventDefault();
-
+  pagesValidation = () => {
     const errors = {};
-    this.pagesValidation(errors);
+    const regexForEmail = /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i;
+    const regexForMobile = /^\d[\d()-]{4,14}\d$/;
+
+    switch (this.state.currentPage) {
+      case 1:
+        if (this.state.values.firstName.length < 5) {
+          errors.firstName = 'Must be 5 characters or more';
+        }
+        if (this.state.values.lastName.length < 5) {
+          errors.lastName = 'Must be 5 characters or more';
+        }
+        if (this.state.values.password.length < 6) {
+          errors.password = 'Must be 6 characters or more';
+        }
+        if (this.state.values.password !== this.state.values.repeatPassword) {
+          errors.repeatPassword = 'Must be equal password';
+        }
+        break;
+
+      case 2:
+        if (!regexForEmail.test(this.state.values.email)) {
+          errors.email = 'Invalid email address';
+        }
+        if (!regexForMobile.test(this.state.values.mobile)) {
+          errors.mobile = 'Invalid mobile';
+        }
+        if (!Number(this.state.values.country)) {
+          errors.country = 'Required';
+        }
+        if (!Number(this.state.values.city)) {
+          errors.city = 'Required';
+        }
+        break;
+
+      case 3:
+        if (this.state.values.avatar === '') {
+          errors.avatar = 'Required';
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    return errors;
+  };
+
+  updatePage = pageNumber => {
+    const errors = this.pagesValidation();
 
     if (Object.keys(errors).length > 0) {
       this.setState({
-        errors: errors,
+        errors,
       });
     } else {
       this.setState({
-        currentpage: this.state.currentpage + 1,
+        currentPage: pageNumber,
         errors: {},
       });
     }
   };
 
-  onReset = () => {
-    this.setState({
-      firstname: '',
-      lastname: '',
-      password: '',
-      repeatPassword: '',
-      gender: 'male',
-      email: '',
-      mobile: '',
-      country: '1',
-      city: '',
-      avatar: '',
-      currentpage: 1,
-      errors: {
-        firstname: false,
-        lastname: false,
-        password: false,
-        repeatPassword: false,
-        email: false,
-        mobile: false,
-        country: false,
-        city: false,
-        avatar: false,
-      },
-    });
-  };
-
   render() {
     return (
       <div className="form-container card">
-        <Stepper currentPage={this.state.currentpage} />
+        <Stepper currentPage={this.state.currentPage} />
         <form className="form card-body">
-          {this.state.currentpage === 1 && (
-            <Basic onChange={this.onChange} stateApp={this.state} />
+          {this.state.currentPage === 1 && (
+            <Basic
+              onChange={this.onChange}
+              values={this.state.values}
+              errors={this.state.errors}
+            />
           )}
-          {this.state.currentpage === 2 && (
+          {this.state.currentPage === 2 && (
             <Contacts
               onChange={this.onChange}
-              stateApp={this.state}
-              getOptionsItems={this.getOptionsItems}
-              getOptionsCities={this.getOptionsCities}
+              values={this.state.values}
+              errors={this.state.errors}
             />
           )}
-          {this.state.currentpage === 3 && (
+          {this.state.currentPage === 3 && (
             <Avatar
-              onChangeAvatar={this.onChangeAvatar}
-              stateApp={this.state}
+              values={this.state.values}
+              errors={this.state.errors}
+              onChange={this.onChange}
             />
           )}
-          {this.state.currentpage === 4 && <Finish stateApp={this.state} />}
-          <div className="d-flex justify-content-center">
-            {this.state.currentpage !== 4 ? (
-              <div>
-                <button
-                  type="button"
-                  className={classNames(
-                    'btn',
-                    { 'btn-secondary': this.state.currentpage !== 1 },
-                    { 'btn-light': this.state.currentpage === 1 },
-                    { disabled: this.state.currentpage === 1 }
-                  )}
-                  onClick={this.previousFormPage}
-                >
-                  Previous
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-secondary ml-4"
-                  onClick={this.nextFormPage}
-                >
-                  Next
-                </button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={this.onReset}
-              >
-                Reset
-              </button>
-            )}
-          </div>
+          {this.state.currentPage === 4 && (
+            <Finish values={this.state.values} />
+          )}
+          <BottomNavigation
+            currentPage={this.state.currentPage}
+            pagesValidation={this.pagesValidation}
+            updatePage={this.updatePage}
+            onReset={this.onReset}
+          />
         </form>
       </div>
     );
