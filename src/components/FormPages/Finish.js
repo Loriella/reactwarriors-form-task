@@ -1,6 +1,6 @@
 import React from 'react';
-import countries from '../data/countries';
-import cities from '../data/cities';
+import countries from '../../data/countries';
+import cities from '../../data/cities';
 
 const Finish = props => {
   const { values } = props;

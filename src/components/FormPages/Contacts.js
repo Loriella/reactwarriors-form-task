@@ -1,7 +1,7 @@
 import React from 'react';
-import Field from './Field';
-import countries from '../data/countries';
-import cities from '../data/cities';
+import Field from '../FormElements/Field';
+import countries from '../../data/countries';
+import cities from '../../data/cities';
 
 const getOptionsCountries = countries => {
   return [{ id: 0, name: 'Select country' }].concat(countries);

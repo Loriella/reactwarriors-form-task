@@ -1,10 +1,10 @@
 import React from 'react';
-import Stepper from './Stepper';
-import Basic from './Basic';
-import Contacts from './Contacts';
-import Avatar from './Avatar';
-import Finish from './Finish';
-import BottomNavigation from './BottomNavigation';
+import Stepper from './Navigation/Stepper';
+import Basic from './FormPages/Basic';
+import Contacts from './FormPages/Contacts';
+import Avatar from './FormPages/Avatar';
+import Finish from './FormPages/Finish';
+import BottomNavigation from './Navigation/BottomNavigation';
 
 const initialState = {
   values: {
@@ -50,7 +50,7 @@ export default class App extends React.Component {
 
     this.setState(state => ({
       values: {
-        ...this.state.values,
+        ...state.values,
         city: cityState,
         [name]: value,
       },
