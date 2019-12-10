@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 const BottomNavigation = props => {
-  const { currentPage, updatePage, onReset } = props;
+  const { currentPage, nextPage, previousPage, onReset } = props;
 
   return (
     <div className="d-flex justify-content-center">
@@ -16,14 +16,14 @@ const BottomNavigation = props => {
               { 'btn-light': currentPage === 1 }
             )}
             disabled={currentPage === 1}
-            onClick={() => updatePage(currentPage - 1)}
+            onClick={() => previousPage(currentPage - 1)}
           >
             Previous
           </button>
           <button
             type="button"
             className="btn btn-secondary ml-4"
-            onClick={() => updatePage(currentPage + 1)}
+            onClick={() => nextPage(currentPage + 1)}
           >
             Next
           </button>

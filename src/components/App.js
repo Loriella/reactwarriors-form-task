@@ -42,16 +42,14 @@ export default class App extends React.Component {
 
   onChange = event => {
     const { name, value } = event.target;
-    let cityState = this.state.values.city;
-
-    if (name === 'country' && value !== this.state.values.country) {
-      cityState = '';
-    }
 
     this.setState(state => ({
       values: {
         ...state.values,
-        city: cityState,
+        city:
+          name === 'country' && value !== this.state.values.country
+            ? ''
+            : state.values.city,
         [name]: value,
       },
     }));
@@ -106,13 +104,12 @@ export default class App extends React.Component {
         break;
 
       default:
-        break;
     }
 
     return errors;
   };
 
-  updatePage = pageNumber => {
+  nextPage = pageNumber => {
     const errors = this.pagesValidation();
 
     if (Object.keys(errors).length > 0) {
@@ -125,6 +122,12 @@ export default class App extends React.Component {
         errors: {},
       });
     }
+  };
+
+  previousPage = pageNumber => {
+    this.setState({
+      currentPage: pageNumber,
+    });
   };
 
   render() {
@@ -159,7 +162,8 @@ export default class App extends React.Component {
           <BottomNavigation
             currentPage={this.state.currentPage}
             pagesValidation={this.pagesValidation}
-            updatePage={this.updatePage}
+            nextPage={this.nextPage}
+            previousPage={this.previousPage}
             onReset={this.onReset}
           />
         </form>
